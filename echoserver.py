@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+    Demo for SimpleSebSocketServer, implemeneted as an echo server.
+"""
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
 class SimpleEcho(WebSocket):
