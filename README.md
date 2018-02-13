@@ -11,7 +11,8 @@ The project consists of a browser-based front-end using WebSockets, and back-end
 ### Commands
 
 ## Fron-end (web)
- | */quit* | Disconnect from the server |
+| Command | Description |
+| ------- | ----------- |
+| */quit* | Disconnect from the server |
 
 ## Back-end (python)
-
