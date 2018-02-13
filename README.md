@@ -7,3 +7,11 @@ as well as provide a home for the [Solar Winds](https://github.com/QBFreak/Solar
 
 ## Layout
 The project consists of a browser-based front-end using WebSockets, and back-end Python WebSockt server/MUD engine.
+
+### Commands
+
+## Fron-end (web)
+ | */quit* | Disconnect from the server |
+
+## Back-end (python)
+
