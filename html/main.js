@@ -31,15 +31,13 @@ window.onload = function(){
         // Is it a quit command?
         if (command == "/quit") {
           connection.close();
-          output.innerHTML += "<br />\nDisconnecting."
+          addOutputLine("Disconnecting.")
         // No? Send it to the game
         } else {
           connection.send(command)
         }
         // Add every attempted command to he input history
-        inputtextarea.value = "";
-        inputtextarea.value = "";
-        inputhistory.scrollTop = inputhistory.scrollHeight;
+        addHistoryLine(command);
       }
   }, false);
 
@@ -48,22 +46,31 @@ window.onload = function(){
 
   connection.onopen = function() {
     console.log("Connection Opened");
-    output.value += "<br />\n";
-    output.value += "You are now connected.";
+    addOutputLine("You are now connected.");
     connection.send("Ping!");
   }
 
   connection.onerror = function (error) {
-    console.log("Errpr");
-    output.value += "<br />\n"
-    output.value += 'WebSocket Error ' + error
+    addOutputLine('WebSocket Error ' + error)
     console.log('WebSocket Error ' + error);
   };
 
   connection.onmessage = function (e) {
     console.log("Connection recieved message: " + e.data);
-    output.innerHTML += "<br />\n"
-    output.innerHTML += 'Server: '+ e.data
+    addOutputLine(e.data);
   };
+
+  function addHistoryLine (line) {
+    inputhistory.innerHTML += "<br />\n&#9657; " + line;
+    inputtextarea.value = "";
+    inputhistory.scrollTop = inputhistory.scrollHeight;
+  }
+
+  function addOutputLine (line) {
+    console.log("OUTPUT: " + line);
+    console.log(output.value);
+    output.innerHTML += "<br />\n";
+    output.innerHTML += line
+  }
 
 }

@@ -10,7 +10,7 @@ The project consists of a browser-based front-end using WebSockets, and back-end
 
 ### Commands
 
-## Fron-end (web)
+## Front-end (web)
 | Command | Description |
 | ------- | ----------- |
 | */quit* | Disconnect from the server |
