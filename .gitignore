@@ -1,3 +1,4 @@
+*.pyc
 *.pem
 *.key
 SimpleExampleServer.py
