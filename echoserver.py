@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
     Demo for SimpleSebSocketServer, implemeneted as an echo server.
+    By dpallot: https://github.com/dpallot/simple-websocket-server/blob/master/README.md
 """
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
