@@ -37,6 +37,9 @@ window.onload = function(){
 
   var placeholder = "Type commands here";
 
+  var history = [];
+  var historyPtr = -1;
+
   var marker_rect = inputmarker.getBoundingClientRect();
   var input_rect = inputtextarea.getBoundingClientRect();
   inputtextarea.style.float = "none";
@@ -56,35 +59,48 @@ window.onload = function(){
   }
 
   inputtextarea.addEventListener('keyup', function (e) {
-      if (e.keyCode === 13) {
-        command = inputtextarea.value;
-        command = command.trimRight('\r\n ');
-        // Is it a command?
-        switch(command) {
-          case "/quit":
-            // Only close the connection if it is open
-            if (connection.readyState == 1) {
-              connection.close();
-              addOutputLine("Disconnecting...");
-            }
-            break;
+      switch (e.keyCode) {
+        case 13:
+          command = inputtextarea.value;
+          command = command.trimRight('\r\n ');
+          // Is it a command?
+          switch(command) {
+            case "/quit":
+              // Only close the connection if it is open
+              if (connection.readyState == 1) {
+                connection.close();
+                addOutputLine("Disconnecting...");
+              }
+              break;
 
-          case "/connect":
-            // Only open the connection if it is closed
-            if (connection.readyState == 3) {
-              connection = openWebsocket('ws://localhost:8080/');
-              console.log("New connnection");
-            } else {
-              addOutputLine("Sorry, the socket is not in a proper readyState");
-            }
-            break;
+            case "/connect":
+              // Only open the connection if it is closed
+              if (connection.readyState == 3) {
+                connection = openWebsocket('ws://localhost:8080/');
+                console.log("New connnection");
+              } else {
+                addOutputLine("Sorry, the socket is not in a proper readyState");
+              }
+              break;
 
-          default:
-            // No? Send it to the game
-            connection.send(command);
-        }
-        // Add every attempted command to he input history
-        addHistoryLine(command);
+            default:
+              // No? Send it to the game
+              connection.send(command);
+              historyPtr = -1;
+          }
+          // Add every attempted command to he input history
+          addHistoryLine(command);
+          break;
+
+        case 38:
+          historyPtr++;
+          updateHistory();
+          break;
+
+        case 40:
+          historyPtr--;
+          updateHistory();
+          break;
       }
   }, false);
 
@@ -94,6 +110,7 @@ window.onload = function(){
     inputhistory.innerHTML += "<br />\n&#9657; " + line;
     inputtextarea.value = "";
     inputhistory.scrollTop = inputhistory.scrollHeight;
+    history.push(line);
   }
 
   function addOutputLine (line) {
@@ -101,5 +118,19 @@ window.onload = function(){
     console.log(output.value);
     output.innerHTML += "<br />\n";
     output.innerHTML += line;
+  }
+
+  function updateHistory() {
+    if (historyPtr < 0) {
+      historyPtr = -1;
+      inputtextarea.value = "";
+    } else {
+      if (historyPtr < history.length) {
+        inputtextarea.value = history[history.length - historyPtr - 1];
+      } else {
+        historyPtr = -1;
+        inputtextarea.value = "";
+      }
+    }
   }
 }
