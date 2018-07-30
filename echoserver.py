@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
     Demo for SimpleSebSocketServer, implemeneted as an echo server.
 """
