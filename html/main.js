@@ -1,4 +1,5 @@
 window.onload = function(){
+  var status = document.getElementById("status");
   var inputmarker = document.getElementById("inputmarker");
   var inputtextarea = document.getElementById("inputtextarea");
   var inputhistory = document.getElementById("inputhistory");
@@ -31,6 +32,7 @@ window.onload = function(){
         // Is it a quit command?
         if (command == "/quit") {
           connection.close();
+          status.innerHTML = "Disconnected";
           addOutputLine("Disconnecting.")
         // No? Send it to the game
         } else {
@@ -46,6 +48,7 @@ window.onload = function(){
 
   connection.onopen = function() {
     console.log("Connection Opened");
+    status.innerHTML = "Connected";
     addOutputLine("You are now connected.");
     connection.send("Ping!");
   }
