@@ -1,4 +1,34 @@
 window.onload = function(){
+  function openWebsocket(loc) {
+    var ws = new WebSocket(loc);
+    console.log("Connection created.");
+
+    ws.onopen = function() {
+      console.log("Connection Opened");
+      status.innerHTML = "Connected";
+      addOutputLine("You are now connected.");
+      ws.send("Ping!");
+    }
+
+    ws.onerror = function (error) {
+      addOutputLine('WebSocket Error ' + error);
+      console.log('WebSocket Error ' + error);
+    };
+
+    ws.onmessage = function (e) {
+      console.log("Connection recieved message: " + e.data);
+      addOutputLine(e.data);
+    };
+
+    ws.onclose = function (e) {
+      console.log("Connection closed");
+      addOutputLine("Disconnected.");
+      status.innerHTML = "Disconnected";
+    }
+
+    return ws;
+  }
+
   var status = document.getElementById("status");
   var inputmarker = document.getElementById("inputmarker");
   var inputtextarea = document.getElementById("inputtextarea");
@@ -42,7 +72,7 @@ window.onload = function(){
           case "/connect":
             // Only open the connection if it is closed
             if (connection.readyState == 3) {
-              connection = new WebSocket('ws://localhost:8080/');
+              connection = openWebsocket('ws://localhost:8080/');
               console.log("New connnection");
             } else {
               addOutputLine("Sorry, the socket is not in a proper readyState");
@@ -58,31 +88,7 @@ window.onload = function(){
       }
   }, false);
 
-  var connection = new WebSocket('ws://localhost:8080/');
-  console.log("Connection created.");
-
-  connection.onopen = function() {
-    console.log("Connection Opened");
-    status.innerHTML = "Connected";
-    addOutputLine("You are now connected.");
-    connection.send("Ping!");
-  }
-
-  connection.onerror = function (error) {
-    addOutputLine('WebSocket Error ' + error);
-    console.log('WebSocket Error ' + error);
-  };
-
-  connection.onmessage = function (e) {
-    console.log("Connection recieved message: " + e.data);
-    addOutputLine(e.data);
-  };
-
-  connection.onclose = function (e) {
-    console.log("Connection closed");
-    addOutputLine("Disconnected.");
-    status.innerHTML = "Disconnected";
-  }
+  var connection = openWebsocket('ws://localhost:8080/');
 
   function addHistoryLine (line) {
     inputhistory.innerHTML += "<br />\n&#9657; " + line;
@@ -96,5 +102,4 @@ window.onload = function(){
     output.innerHTML += "<br />\n";
     output.innerHTML += line;
   }
-
 }
